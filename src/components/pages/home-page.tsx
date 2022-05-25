@@ -1,11 +1,11 @@
 import React, { FC } from 'react'
 
-import { PageContainer } from '@reapit/elements'
+import { PageContainer, Title } from '@reapit/elements'
 
 export const HomePage: FC = () => {
   return (
     <PageContainer>
-      <h1>hi from page</h1>
+      <Title>dimasm, hi from page</Title>
     </PageContainer>
   )
 }

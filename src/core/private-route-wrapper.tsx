@@ -48,7 +48,7 @@ export const PrivateRouteWrapper: FC<PrivateRouteWrapperProps> = ({ children }) 
   }, [])
 
   // detect is using PWA in here or nah ✅
-  // go outside PWA (in case user click web experience inside PWA) ⛔
+  // go outside PWA (in case user click web experience inside PWA) 🧑‍💻 (works in mobile, doesnot works in browser)
   // when user already install the PWA, then they should immediately open the link to open the PWA 🧑‍💻
 
   if (!connectSession) {
@@ -66,6 +66,7 @@ export const PrivateRouteWrapper: FC<PrivateRouteWrapperProps> = ({ children }) 
   }
 
   // TODO: add nav item to switch, between PWA or nah
+  // context
   return (
     <MainContainer>
       <Nav />

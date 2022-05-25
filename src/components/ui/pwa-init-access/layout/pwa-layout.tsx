@@ -7,8 +7,6 @@ type PWALayoutAccessProps = {
   children: React.ReactNode
 }
 
-// TODO: add hooks that can detect is running on PWA or nah
-
 const PWALayoutAccess = ({ children }: PWALayoutAccessProps) => {
   return (
     <FlexContainer isFlexJustifyCenter isFlexAlignCenter isFlexColumn className="el-wfull el-hfull">
