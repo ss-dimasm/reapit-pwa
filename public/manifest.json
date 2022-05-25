@@ -19,9 +19,6 @@
   "background_color": "#ffffff",
   "url_handlers": [
     {
-      "origin": "https://localhost:3000"
-    },
-    {
       "origin": "https://reapit-pwa-ss-dimasm.vercel.app"
     }
   ]
