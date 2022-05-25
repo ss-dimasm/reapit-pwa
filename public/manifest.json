@@ -1,6 +1,6 @@
 {
-  "short_name": "Dim PWA",
-  "name": "Dim PWA Reapit React Template",
+  "name": "Sample Reapit PWA",
+  "short_name": "Sample PWA",
   "icons": [
     {
       "src": "reapit32.png",
@@ -16,5 +16,13 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#262F69",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "url_handlers": [
+    {
+      "origin": "localhost:3000"
+    },
+    {
+      "origin": "https://reapit-pwa-ss-dimasm.vercel.app"
+    }
+  ]
 }

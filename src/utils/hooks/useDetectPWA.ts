@@ -1,7 +1,7 @@
 import { useLayoutEffect, useState } from 'react'
 
 export const useDetectPWA = () => {
-  const [isInsidePWA, setIsInsidePWA] = useState<boolean>(false)
+  const [isInsidePWA, setIsInsidePWA] = useState<boolean>(window.matchMedia('(display-mode: standalone)').matches)
 
   useLayoutEffect(() => {
     const updateHandler = () => {

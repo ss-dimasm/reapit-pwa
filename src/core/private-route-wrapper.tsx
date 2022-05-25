@@ -1,4 +1,4 @@
-import React, { FC, Suspense, useMemo, useState } from 'react'
+import React, { FC, Suspense, useEffect, useMemo, useState } from 'react'
 import { useReapitConnect } from '@reapit/connect-session'
 import { Nav } from '../components/ui/nav/nav'
 import { reapitConnectBrowserSession } from './connect-session'
@@ -7,6 +7,7 @@ import { Loader, MainContainer, PageContainer } from '@reapit/elements'
 
 import ChooseValidationPage from 'components/ui/pwa-init-access/choose-validation-page'
 import VerifyingValidationPage from 'components/ui/pwa-init-access/verifying-validation-page'
+import { useDetectPWA } from 'utils/hooks/useDetectPWA'
 
 export type PrivateRouteWrapperProps = {}
 
@@ -36,10 +37,17 @@ export const PrivateRouteWrapper: FC<PrivateRouteWrapperProps> = ({ children }) 
     }),
     [children],
   )
+  const { isInsidePWA } = useDetectPWA()
 
-  // detect is using PWA in here or nah
-  // go outside PWA (in case user click web experience inside PWA)
-  // when user already install the PWA, then they should immediately open the link
+  useEffect(() => {
+    if (isInsidePWA) {
+      setCurrentValidationStatus('permitted')
+    }
+  }, [])
+
+  // detect is using PWA in here or nah ✅
+  // go outside PWA (in case user click web experience inside PWA) ⛔
+  // when user already install the PWA, then they should immediately open the link to open the PWA 🧑‍💻
 
   if (!connectSession) {
     return (

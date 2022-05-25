@@ -1,0 +1,18 @@
+{
+  "web_apps": [
+    {
+      "manifest": "localhost:3000/manifest.json",
+      "details": {
+        "paths": ["*"],
+        "exclude_paths": []
+      }
+    },
+    {
+      "manifest": "https://reapit-pwa-ss-dimasm.vercel.app",
+      "details": {
+        "paths": ["*"],
+        "exclude_paths": []
+      }
+    }
+  ]
+}

@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import PWALayoutAccess from './layout'
 
 import { AvailableValidationHandler } from 'core/private-route-wrapper'
-import { BodyText, Button, FlexContainer, Loader, Subtitle } from '@reapit/elements'
+import { BodyText, Button, ButtonGroup, FlexContainer, Loader, useSnack } from '@reapit/elements'
 import { useDetectPWA } from 'utils/hooks/useDetectPWA'
 
 type VerifyingValidationPageType = {} & Partial<AvailableValidationHandler>
@@ -17,15 +17,12 @@ window.addEventListener('beforeinstallprompt', (e) => {
 // TODO: how to check is PWA already installed
 // TODO: if not possible, show a button to open in web experience also with message 'you already install, please open'
 const VerifyingValidationPage = ({ onChangeCurrentValidationStatus }: VerifyingValidationPageType) => {
-  const [installable, setInstallable] = useState<boolean>(false)
   const [isInstalled, setIsInstalled] = useState<boolean>(false)
 
   const { isInsidePWA } = useDetectPWA()
+  const { custom } = useSnack()
 
   useEffect(() => {
-    if (promptHandler) {
-      setInstallable(true)
-    }
     window.addEventListener('appinstalled', () => {
       setIsInstalled(true)
     })
@@ -33,25 +30,18 @@ const VerifyingValidationPage = ({ onChangeCurrentValidationStatus }: VerifyingV
 
   const handleInstallClick = useCallback(() => {
     promptHandler.prompt()
-    promptHandler.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the install prompt')
-      } else {
-        console.log('User dismissed the install prompt')
-      }
-    })
   }, [])
 
   const renderComponent = (() => {
     if (isInsidePWA || isInstalled) {
-      console.log('here')
+      // condition when user successfully install the PWA or already inside the PWA
       setTimeout(() => {
         onChangeCurrentValidationStatus && onChangeCurrentValidationStatus('permitted')
       }, 2500)
 
       const generateTextContent = (() => {
         if (isInsidePWA) {
-          return 'You already run in Mobile experience, redirecting'
+          return 'You are inside in Mobile experience, redirecting'
         }
         return 'Success to install! redirecting'
       })()
@@ -68,26 +58,51 @@ const VerifyingValidationPage = ({ onChangeCurrentValidationStatus }: VerifyingV
           </div>
         </FlexContainer>
       )
-    } else {
-      // check PWA installed
-
+    } else if (promptHandler && !isInstalled && !isInsidePWA) {
+      // condition when user does not have installed PWA and able to install
       return (
         <>
-          <Subtitle style={{ color: 'var(--color-white)' }}>Trigger the PWA then open it</Subtitle>
+          <BodyText style={{ color: 'var(--color-white)' }}>
+            Explore with Mobile experience by tapping the button below
+          </BodyText>
           <FlexContainer isFlexJustifyEnd>
-            {installable && (
-              <Button
-                fixedWidth
-                onClick={() => {
-                  console.log('trigger install prompt')
-                  handleInstallClick()
-                }}
-              >
-                Install PWA
-              </Button>
-            )}
-            <Button onClick={() => window.open('http://localhost:3000')}>Test</Button>
+            <Button fixedWidth onClick={handleInstallClick}>
+              Install PWA
+            </Button>
           </FlexContainer>
+        </>
+      )
+    } else {
+      // condition when user already install the PWA but currently run with browser
+      return (
+        <>
+          <BodyText style={{ color: 'var(--color-white)' }}>
+            Looks like you already install the Mobile experience
+          </BodyText>
+          <ButtonGroup>
+            <Button
+              onClick={() => {
+                onChangeCurrentValidationStatus && onChangeCurrentValidationStatus('permitted')
+              }}
+              intent="secondary"
+            >
+              Switch To Web Experience
+            </Button>
+            <Button
+              onClick={() =>
+                custom(
+                  {
+                    text: 'Please to open the PWA manually',
+                    icon: 'infoSolidSystem',
+                    intent: 'secondary',
+                  },
+                  1500,
+                )
+              }
+            >
+              Continue with Mobile Experience
+            </Button>
+          </ButtonGroup>
         </>
       )
     }

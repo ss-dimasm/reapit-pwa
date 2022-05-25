@@ -33,6 +33,12 @@ export const Nav: FC = () => {
       iconId: 'defaultMenu',
       callback: navigate(history, Routes.HOME),
     },
+    {
+      itemIndex: 2,
+      text: 'Data',
+      iconId: 'dataMenu',
+      callback: navigate(history, Routes.DATA),
+    },
   ]
 
   if (!connectIsDesktop) {
