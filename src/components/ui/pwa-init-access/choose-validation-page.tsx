@@ -6,6 +6,7 @@ import PWALayoutAccess from './layout'
 import { BodyText, FlexContainer } from '@reapit/elements'
 import { AvailableValidationHandler } from 'core/private-route-wrapper'
 import { useDetectPWA } from 'utils/hooks/useDetectPWA'
+import { wrapper } from './__styles__/'
 
 type ChooseValidationPageType = {} & Partial<AvailableValidationHandler>
 
@@ -18,7 +19,7 @@ const ChooseValidationPage = ({ onChangeCurrentValidationStatus }: ChooseValidat
 
   return (
     <PWALayoutAccess>
-      <FlexContainer isFlexJustifyBetween>
+      <FlexContainer isFlexJustifyBetween className={wrapper}>
         <LandingPageIcon
           textName="Mobile Experience"
           icon="appsMenu"

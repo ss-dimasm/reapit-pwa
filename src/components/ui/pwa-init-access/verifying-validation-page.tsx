@@ -79,7 +79,7 @@ const VerifyingValidationPage = ({ onChangeCurrentValidationStatus }: VerifyingV
           <BodyText style={{ color: 'var(--color-white)' }}>
             Looks like you already install the Mobile experience
           </BodyText>
-          <ButtonGroup>
+          <ButtonGroup alignment="center">
             <Button
               onClick={() => {
                 onChangeCurrentValidationStatus && onChangeCurrentValidationStatus('permitted')
