@@ -10,7 +10,10 @@ type MobileVerifyingValidationPageType = {} & Partial<AvailableValidationHandler
 const MobileVerifyingValidationPage = ({ onChangeCurrentValidationStatus }: MobileVerifyingValidationPageType) => {
   return (
     <PWALayoutAccess>
-      <BodyText style={{ color: 'var(--color-white)' }}>Currently you are installing PWA on your device</BodyText>
+      <BodyText style={{ color: 'var(--color-white)' }}>
+        Currently you are installing PWA on your device, you can access this application again after installation of PWA
+        is success. Or you can continue with the web experience by tapping the button below.
+      </BodyText>
       <ButtonGroup alignment="right">
         <Button
           onClick={() => {

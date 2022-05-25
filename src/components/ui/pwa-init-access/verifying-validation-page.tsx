@@ -32,7 +32,6 @@ const VerifyingValidationPage = ({ onChangeCurrentValidationStatus }: VerifyingV
     promptHandler.prompt()
   }, [])
 
-  console.log(clientWidth)
   const renderComponent = (() => {
     if (isInsidePWA || isInstalled) {
       // condition when user successfully install the PWA or already inside the PWA
