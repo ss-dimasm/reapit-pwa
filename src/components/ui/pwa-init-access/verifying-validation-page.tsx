@@ -36,10 +36,10 @@ const VerifyingValidationPage = ({ onChangeCurrentValidationStatus }: VerifyingV
     if (isInsidePWA || isInstalled) {
       // condition when user successfully install the PWA or already inside the PWA
       setTimeout(() => {
-        if (clientWidth >= MOBILE_BREAKPOINT) {
-          onChangeCurrentValidationStatus && onChangeCurrentValidationStatus('permitted')
-        } else {
+        if (clientWidth < MOBILE_BREAKPOINT && !isInsidePWA) {
           onChangeCurrentValidationStatus && onChangeCurrentValidationStatus('mobileVerifying')
+        } else {
+          onChangeCurrentValidationStatus && onChangeCurrentValidationStatus('permitted')
         }
       }, 2500)
 
