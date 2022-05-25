@@ -1,67 +1,99 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import PWALayoutAccess from './layout'
 
 import { AvailableValidationHandler } from 'core/private-route-wrapper'
-import { Button, FlexContainer, Subtitle } from '@reapit/elements'
+import { BodyText, Button, FlexContainer, Loader, Subtitle } from '@reapit/elements'
+import { useDetectPWA } from 'utils/hooks/useDetectPWA'
 
 type VerifyingValidationPageType = {} & Partial<AvailableValidationHandler>
 
-// eslint-disable-next-line no-unused-vars
+let promptHandler: any
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  promptHandler = e
+})
+
+// TODO: how to check is PWA already installed
+// TODO: if not possible, show a button to open in web experience also with message 'you already install, please open'
 const VerifyingValidationPage = ({ onChangeCurrentValidationStatus }: VerifyingValidationPageType) => {
   const [installable, setInstallable] = useState<boolean>(false)
-  const [currentPrompt, setCurrentPrompt] = useState<any>(null)
+  const [isInstalled, setIsInstalled] = useState<boolean>(false)
+
+  const { isInsidePWA } = useDetectPWA()
 
   useEffect(() => {
-    window.addEventListener('beforeinstallprompt', (e: any) => {
-      // should works if the URL has HTTPS SSL
-      e.preventDefault()
-      setCurrentPrompt(e)
+    if (promptHandler) {
       setInstallable(true)
-    })
-
+    }
     window.addEventListener('appinstalled', () => {
-      onChangeCurrentValidationStatus && onChangeCurrentValidationStatus('permitting')
+      setIsInstalled(true)
     })
   }, [])
 
-  console.log('trackCurrentPrompt', currentPrompt)
-
-  const handleInstallClick = () => {
-    console.log('inside onclick')
-    if (currentPrompt) {
-      // Show the install prompt
-      currentPrompt.prompt()
-    }
-    // Wait for the user to respond to the prompt
-    currentPrompt.userChoice.then((choiceResult) => {
+  const handleInstallClick = useCallback(() => {
+    promptHandler.prompt()
+    promptHandler.userChoice.then((choiceResult) => {
       if (choiceResult.outcome === 'accepted') {
         console.log('User accepted the install prompt')
       } else {
         console.log('User dismissed the install prompt')
       }
     })
-  }
+  }, [])
 
-  console.log(window.navigator)
-  return (
-    <PWALayoutAccess>
-      <Subtitle style={{ color: 'var(--color-white)' }}>Trigger the PWA then open it</Subtitle>
-      <FlexContainer isFlexJustifyEnd>
-        {installable && (
-          <Button
-            fixedWidth
-            onClick={() => {
-              console.log('trigger install prompt')
-              handleInstallClick()
-            }}
-          >
-            Install PWA
-          </Button>
-        )}
-      </FlexContainer>
-    </PWALayoutAccess>
-  )
+  const renderComponent = (() => {
+    if (isInsidePWA || isInstalled) {
+      console.log('here')
+      setTimeout(() => {
+        onChangeCurrentValidationStatus && onChangeCurrentValidationStatus('permitted')
+      }, 2500)
+
+      const generateTextContent = (() => {
+        if (isInsidePWA) {
+          return 'You already run in Mobile experience, redirecting'
+        }
+        return 'Success to install! redirecting'
+      })()
+
+      return (
+        <FlexContainer isFlexJustifyCenter isFlexAlignCenter>
+          <div>
+            <BodyText hasCenteredText hasNoMargin style={{ color: 'var(--color-white)' }}>
+              {generateTextContent}
+            </BodyText>
+          </div>
+          <div className="el-ml4">
+            <Loader />
+          </div>
+        </FlexContainer>
+      )
+    } else {
+      // check PWA installed
+
+      return (
+        <>
+          <Subtitle style={{ color: 'var(--color-white)' }}>Trigger the PWA then open it</Subtitle>
+          <FlexContainer isFlexJustifyEnd>
+            {installable && (
+              <Button
+                fixedWidth
+                onClick={() => {
+                  console.log('trigger install prompt')
+                  handleInstallClick()
+                }}
+              >
+                Install PWA
+              </Button>
+            )}
+            <Button onClick={() => window.open('http://localhost:3000')}>Test</Button>
+          </FlexContainer>
+        </>
+      )
+    }
+  })()
+
+  return <PWALayoutAccess>{renderComponent}</PWALayoutAccess>
 }
 
 export default VerifyingValidationPage

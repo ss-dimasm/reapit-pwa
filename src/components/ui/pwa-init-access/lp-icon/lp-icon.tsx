@@ -13,7 +13,7 @@ const LandingPageIcon = ({ icon, textName, ...htmlProps }: LandingPageIconProps)
       isFlexColumn
       isFlexJustifyCenter
       isFlexAlignCenter
-      className="el-mr10 el-px10 el-py5"
+      className={' el-px12 el-py5'}
       style={{ backgroundColor: 'var(--color-blue-dark2)', cursor: 'pointer' }}
       {...htmlProps}
     >

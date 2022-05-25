@@ -7,11 +7,10 @@ import { Loader, MainContainer, PageContainer } from '@reapit/elements'
 
 import ChooseValidationPage from 'components/ui/pwa-init-access/choose-validation-page'
 import VerifyingValidationPage from 'components/ui/pwa-init-access/verifying-validation-page'
-import PermittingValidationPage from 'components/ui/pwa-init-access/permitting-validation-page'
 
 export type PrivateRouteWrapperProps = {}
 
-type AvailableValidation = 'choose' | 'verifying' | 'permitting' | 'permitted'
+type AvailableValidation = 'choose' | 'verifying' | 'permitted'
 
 export type AvailableValidationHandler = {
   currentValidationStatus: AvailableValidation
@@ -33,11 +32,14 @@ export const PrivateRouteWrapper: FC<PrivateRouteWrapperProps> = ({ children }) 
     () => ({
       choose: <ChooseValidationPage onChangeCurrentValidationStatus={setCurrentValidationStatus} />,
       verifying: <VerifyingValidationPage onChangeCurrentValidationStatus={setCurrentValidationStatus} />,
-      permitting: <PermittingValidationPage />,
       permitted: children,
     }),
-    [currentValidationStatus, children],
+    [children],
   )
+
+  // detect is using PWA in here or nah
+  // go outside PWA (in case user click web experience inside PWA)
+  // when user already install the PWA, then they should immediately open the link
 
   if (!connectSession) {
     return (
@@ -53,7 +55,6 @@ export const PrivateRouteWrapper: FC<PrivateRouteWrapperProps> = ({ children }) 
     return <Redirect to={connectInternalRedirect} />
   }
 
-  console.log('current status validator', currentValidationStatus)
   // TODO: add nav item to switch, between PWA or nah
   return (
     <MainContainer>
