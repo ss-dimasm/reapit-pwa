@@ -4,7 +4,7 @@
       "manifest": "https://reapit-pwa-ss-dimasm.vercel.app/manifest.json",
       "details": {
         "paths": [
-          "*"
+          "/*"
         ],
         "exclude_paths": []
       }
