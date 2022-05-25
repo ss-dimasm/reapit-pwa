@@ -45,9 +45,12 @@ const VerifyingValidationPage = ({ onChangeCurrentValidationStatus }: VerifyingV
 
       const generateTextContent = (() => {
         if (isInsidePWA) {
-          return 'You are inside in Mobile experience, redirecting'
+          return 'You are already inside in Mobile experience!, redirecting'
         }
-        return 'Success to install! redirecting'
+        if (clientWidth < MOBILE_BREAKPOINT) {
+          return 'Access has been granted!, installing'
+        }
+        return 'Successfully to install! redirecting'
       })()
 
       return (

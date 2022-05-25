@@ -11,10 +11,10 @@ const MobileVerifyingValidationPage = ({ onChangeCurrentValidationStatus }: Mobi
   return (
     <PWALayoutAccess>
       <BodyText style={{ color: 'var(--color-white)' }}>
-        Currently you are installing PWA on your device, you can access this application again after installation of PWA
-        is success. Or you can continue with the web experience by tapping the button below.
+        Currently you are installing PWA for this application on your device, you can access this application again with
+        the installed PWA. Or you can continue with the web experience by tapping the button below.
       </BodyText>
-      <ButtonGroup alignment="right">
+      <ButtonGroup alignment="right" className="el-mt6">
         <Button
           onClick={() => {
             onChangeCurrentValidationStatus && onChangeCurrentValidationStatus('permitted')
