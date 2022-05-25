@@ -8,10 +8,11 @@ import { Loader, MainContainer, PageContainer } from '@reapit/elements'
 import ChooseValidationPage from 'components/ui/pwa-init-access/choose-validation-page'
 import VerifyingValidationPage from 'components/ui/pwa-init-access/verifying-validation-page'
 import { useDetectPWA } from 'utils/hooks/useDetectPWA'
+import MobileVerifyingValidationPage from 'components/ui/pwa-init-access/mobile-verifying-validation-page'
 
 export type PrivateRouteWrapperProps = {}
 
-type AvailableValidation = 'choose' | 'verifying' | 'permitted'
+type AvailableValidation = 'choose' | 'verifying' | 'mobileVerifying' | 'permitted'
 
 export type AvailableValidationHandler = {
   currentValidationStatus: AvailableValidation
@@ -33,6 +34,7 @@ export const PrivateRouteWrapper: FC<PrivateRouteWrapperProps> = ({ children }) 
     () => ({
       choose: <ChooseValidationPage onChangeCurrentValidationStatus={setCurrentValidationStatus} />,
       verifying: <VerifyingValidationPage onChangeCurrentValidationStatus={setCurrentValidationStatus} />,
+      mobileVerifying: <MobileVerifyingValidationPage onChangeCurrentValidationStatus={setCurrentValidationStatus} />,
       permitted: children,
     }),
     [children],

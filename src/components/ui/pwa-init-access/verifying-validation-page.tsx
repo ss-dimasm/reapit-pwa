@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import PWALayoutAccess from './layout'
 
 import { AvailableValidationHandler } from 'core/private-route-wrapper'
-import { BodyText, Button, ButtonGroup, FlexContainer, Loader, useSnack } from '@reapit/elements'
+import { BodyText, Button, ButtonGroup, FlexContainer, Loader, MOBILE_BREAKPOINT, useSnack } from '@reapit/elements'
 import { useDetectPWA } from 'utils/hooks/useDetectPWA'
 
 type VerifyingValidationPageType = {} & Partial<AvailableValidationHandler>
@@ -19,7 +19,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 const VerifyingValidationPage = ({ onChangeCurrentValidationStatus }: VerifyingValidationPageType) => {
   const [isInstalled, setIsInstalled] = useState<boolean>(false)
 
-  const { isInsidePWA } = useDetectPWA()
+  const { isInsidePWA, clientWidth } = useDetectPWA()
   const { custom } = useSnack()
 
   useEffect(() => {
@@ -32,11 +32,16 @@ const VerifyingValidationPage = ({ onChangeCurrentValidationStatus }: VerifyingV
     promptHandler.prompt()
   }, [])
 
+  console.log(clientWidth)
   const renderComponent = (() => {
     if (isInsidePWA || isInstalled) {
       // condition when user successfully install the PWA or already inside the PWA
       setTimeout(() => {
-        onChangeCurrentValidationStatus && onChangeCurrentValidationStatus('permitted')
+        if (clientWidth >= MOBILE_BREAKPOINT) {
+          onChangeCurrentValidationStatus && onChangeCurrentValidationStatus('permitted')
+        } else {
+          onChangeCurrentValidationStatus && onChangeCurrentValidationStatus('mobileVerifying')
+        }
       }, 2500)
 
       const generateTextContent = (() => {
